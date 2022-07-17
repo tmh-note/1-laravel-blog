@@ -8,6 +8,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\RegisterController;
+use Illuminate\Support\Facades\Http;
+
+Route::get('/photo', function() {
+    // $json = file_get_contents('https://jsonplaceholder.typicode.com/photos?_limit=10');
+    // $photos = json_decode($json);
+    
+    $response = Http::get('https://jsonplaceholder.typicode.com/photos?_limit=10');
+    return view('photo', [
+        'photos' => $response->object()
+    ]);
+});
 
 // Route::get('/', [PostController::class, 'index']);
 
