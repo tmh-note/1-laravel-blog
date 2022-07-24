@@ -16,6 +16,7 @@
                             <label class="form-label">Email</label>
                             <input type="email"
                                 name="email"
+                                value="{{ old('email') }}"
                                 class="form-control @error('email') is-invalid @enderror">
                                 @error('email')
                                 <div class="invalid-feedback">

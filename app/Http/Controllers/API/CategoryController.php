@@ -6,15 +6,34 @@ use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\CategoryStoreRequst;
 use App\Http\Requests\API\CategoryUpdateRequst;
+use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest('id')->paginate(5);
+        $categories = Category::latest('id')->get();
 
-        return response()->json(compact('categories'));
+        return CategoryResource::collection($categories);
+    }
+
+    public function show($id)
+    {
+        $category = Category::find($id);
+
+        if(! $category) {
+            return response()->json([], 404);
+        }
+
+        // return CategoryResource::make($category);
+        return new CategoryResource($category);
+
+        return response()->json([
+            'id' => $category->id,
+            'name' => $category->name,
+            'created_at' => $category->created_at->diffForHumans(),
+        ], 200);
     }
 
     public function store(CategoryStoreRequst $request)
@@ -24,21 +43,7 @@ class CategoryController extends Controller
         return response()->json(compact('category'), 201);
     }
 
-    public function show($id)
-    {
-        // select id, name, created_at from categories;
-        $category = Category::select(['id', 'name', 'created_at'])->find($id);
 
-        if(! $category) {
-            return response()->json([], 404);
-        }
-
-        return response()->json([
-            'id' => $category->id,
-            'name' => $category->name,
-            'created_at' => $category->created_at->diffForHumans(),
-        ], 200);
-    }
 
     public function update(CategoryUpdateRequst $request, $id)
     {
