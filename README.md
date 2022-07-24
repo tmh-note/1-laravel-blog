@@ -105,25 +105,29 @@ more detail -> https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
 ## Homework
 
-```
-RESTful API (CRUD)
-# products
+Create laravel8 new project 
+ref: https://laravel.com/docs/8.x/installation#installation-via-composer
+design ref: https://bootstrap-ecommerce.com/components.html
+
+CRUD - product
+
+Table - products
 - id
-- name (string)
-- price (int)
+- title
+- description
+- price
 - created_at
 - updated_at
 
+Table - images (Polymorphic One to many)
 
-## Response format
-- Get all products
-[
-    {
-        "id": "x",
-        "name": "x",
-        "price": "1,500",
-        "created_at"
-    },
-    ...
-]
-```
+Table - categories
+- id
+- name
+- created_at
+- updated_at 
+
+Table - category_product
+- product_id
+- category_id
+
