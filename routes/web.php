@@ -1,14 +1,34 @@
 <?php
 
+use App\Models\Post;
+use App\Mail\PostMail;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\RegisterController;
-use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\ChangePasswordController;
+
+Route::get('mail/sent', function() {
+    // Mail::raw('Mail body test', function($m) {
+    //     $m->to('thetminnhtun92@gmail.com')
+    //     ->subject('Test mail again');
+    // });
+
+    $post = Post::first();
+
+    Mail::to('thetminnhtun92@gmail.com')->send(new PostMail($post));
+
+    return 'sent!';
+});
+
+
+
+
 
 Route::get('/photo', function() {
     // $json = file_get_contents('https://jsonplaceholder.typicode.com/photos?_limit=10');
@@ -51,7 +71,7 @@ Route::post('/posts', [PostController::class, 'store'])->middleware('myauth');
 Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->middleware('myauth');
 Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('myauth');
 Route::patch('/posts/{id}', [PostController::class, 'update']);
-Route::get('/posts/{id}', [PostController::class, 'show']);
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('post.show');
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('myauth');
 
 // Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');

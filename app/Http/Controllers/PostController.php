@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostStoreRequest;
-use App\Http\Requests\PostUpdateRequest;
-use App\Models\Category;
-use App\Models\Image;
 use App\Models\Post;
+use App\Models\Image;
+use App\Mail\PostMail;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\PostStoreRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\PostUpdateRequest;
 
 class PostController extends Controller
 {
@@ -72,6 +74,8 @@ class PostController extends Controller
         }
 
         $post->categories()->attach($request->category_ids);
+
+        Mail::to('thetminnhtun92@gmail.com')->send(new PostMail($post));
 
         return redirect('/posts')->with('success', 'A post was created successfully.');
         // $validator = Validator::make($request->all(), [
